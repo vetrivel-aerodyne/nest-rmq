@@ -1,4 +1,4 @@
-import { AmqpConnection, Nack, RabbitRPC } from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection, Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
 import { AddEmployeeDTO } from './dto/add-employee.dto';
 import mongoose, { Model, MongooseError } from 'mongoose';
@@ -53,7 +53,7 @@ export class AppService {
   }
 
   /**handles employee update status queue  */
-  @RabbitRPC({
+  @RabbitSubscribe({
     exchange:"employee",
     routingKey:"update-status",
     queue:'update-status'
