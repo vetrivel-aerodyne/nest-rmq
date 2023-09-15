@@ -1,17 +1,22 @@
 
 import { ApiProperty } from "@nestjs/swagger";
-import { IsAlpha, IsAlphanumeric, IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsStrongPassword, Max, MaxLength, Min, MinLength } from "class-validator";
+import { IsAlpha, IsArray, IsBoolean, IsEnum, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString, IsStrongPassword, Max, MaxLength, Min, MinLength } from "class-validator";
 
-export class AddEmployeeDTO {
+export class UpdateEmployeeDTO {
     @ApiProperty()
     @IsNotEmpty()
-    @IsString()
+    @IsMongoId()
+    employeeId: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
     @MinLength(5)
     @MaxLength(30)
+    @IsString()
     username: string;
 
     @ApiProperty()
-    @IsNotEmpty()
+    @IsOptional()
     @IsStrongPassword()
     @MinLength(8)
     password: string;
@@ -34,6 +39,10 @@ export class AddEmployeeDTO {
     @IsString()
     @IsEnum(['Male', 'Female', 'Others'], { message: "gender must be one of the following values: Male/Female/Others" })
     gender: string;
+
+    @ApiProperty()
+    @IsBoolean()
+    isActive: boolean;
 
     @ApiProperty()
     @IsArray()

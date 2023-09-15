@@ -15,8 +15,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('', app, document);
-  
+
   await app.listen(3003);
-  console.log("employee app server listening on ==>",await app.getUrl())
+  console.log("employee app server listening on ==>", await app.getUrl())
 }
 bootstrap();

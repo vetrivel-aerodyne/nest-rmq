@@ -6,6 +6,7 @@ import { Auth } from './db-schema/auth';
 import { MongoError } from 'mongodb';
 import { InjectModel } from '@nestjs/mongoose';
 import { BcryptService } from './common/bcrypt';
+import { DeleteAuthDTO } from './dto/delete-auth.dto';
 
 @Injectable()
 export class AppService {
@@ -14,16 +15,14 @@ export class AppService {
     private bcryptService:BcryptService,
     private amqpConnection:AmqpConnection){}
 
-    /** handles create authentication */
+    /** handles create and update authentication */
     async createAuth(authData:AuthDTO){
     try{
-      console.log("authData==>",authData);
-      let {username,password,employeeId} =authData;
+      let {username,password,isActive,employeeId} =authData;
 
       password =  await this.bcryptService.hashPassword(password);
 
-      await this.authModel.updateOne({employeeId},{$set:{username,password}},{new:true,upsert:true}).catch((error:MongoError)=>{
-        console.log("error in createAuth=>",error);
+      await this.authModel.updateOne({employeeId},{$set:{username,password,isActive}},{new:true,upsert:true}).catch((error:MongoError)=>{
         return{
           success:false,
           message:error.errmsg,
@@ -43,5 +42,22 @@ export class AppService {
         code:"ERR-INTERN"
       }
     }
+  }
+
+  /** handles delete auth queue*/
+  @RabbitRPC({
+    routingKey:'delete-auth',
+    exchange:'auth',
+    queue:"delete-auth"
+  })
+  async handleDeleteAuth(details:DeleteAuthDTO){
+     let result= await this.authModel.deleteOne({employeeId:details.employeeId}).catch((error:MongoError)=>{
+      return{
+        success:false,
+        message:error.errmsg,
+        code:"ERR-INTERN"
+      }
+    });
+     return result;
   }
 }

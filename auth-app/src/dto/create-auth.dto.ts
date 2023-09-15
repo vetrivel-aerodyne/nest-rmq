@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsAlpha, IsAlphanumeric, IsArray, IsNotEmpty, IsNumber, IsString, IsStrongPassword, Max, Min } from "class-validator";
+import { IsAlphanumeric, IsBoolean, IsMongoId, IsNotEmpty, IsStrongPassword} from "class-validator";
 
 export class AuthDTO{
     @ApiProperty()
@@ -14,7 +14,12 @@ export class AuthDTO{
 
     @ApiProperty()
     @IsNotEmpty()
-    @IsAlpha()
+    @IsBoolean()
+    isActive:boolean;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsMongoId()
     employeeId:string;
 
 }

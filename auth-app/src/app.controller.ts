@@ -14,9 +14,7 @@ export class AppController {
     queue:"create-auth"
   })
   async handleCreateAuth(details:AuthDTO){
-      console.log("processNewAuth details==>",details);
      let result= await this.appService.createAuth(details);
-     console.log("result in createAuth==>",result);
       return result;
   }
 }

@@ -9,7 +9,7 @@ import { Auth } from 'src/db-schema/auth';
 import { AuthLog } from 'src/db-schema/auth-log';
 import { LoginDTO } from 'src/dto/login.dto';
 @Injectable()
-export class LoginService {
+export class AuthService {
 
     constructor(
         @InjectModel(Auth.name) private authModel:Model<Auth>,
@@ -25,7 +25,6 @@ export class LoginService {
             let {username,password}=loginData;
 
             let authDetail = await this.authModel.findOne({username:username});
-            console.log("authDetail==>",authDetail);
             if(!authDetail){
                 return {
                     success:false,
@@ -40,6 +39,14 @@ export class LoginService {
                     success:false,
                     message:"Invalid Password",
                     code:"ERR-PASS"
+                }
+            }
+
+            if(!authDetail.isActive){
+                return {
+                    success:false,
+                    message:"User in In-Active State.contact Admin",
+                    code:"ERR-InActive"
                 }
             }
 

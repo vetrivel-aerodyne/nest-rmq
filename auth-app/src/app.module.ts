@@ -8,7 +8,7 @@ import { BcryptService } from './common/bcrypt';
 import { JWTService } from './common/jwt';
 import { LoginController } from './login/login.controller';
 import { AuthLog, AuthLogSchema } from './db-schema/auth-log';
-import { LoginService } from './login/service/login.service';
+import { AuthService } from './login/service/auth.service';
 
 @Module({
   imports: [
@@ -27,6 +27,6 @@ import { LoginService } from './login/service/login.service';
     connectionInitOptions:{wait:false} 
   })],
   controllers: [AppController, LoginController],
-  providers: [AppService,AppController,BcryptService,JWTService,LoginService],
+  providers: [AppService,AppController,BcryptService,JWTService,AuthService],
 })
 export class AppModule {}
